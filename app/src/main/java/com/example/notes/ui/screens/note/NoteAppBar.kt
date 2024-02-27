@@ -139,7 +139,11 @@ fun EditNoteAppBarActions(note: Note, navigateToListScreen: (Action) -> Unit) {
             navigateToListScreen(Action.DELETE)
         })
 
-    DeleteNoteButton(deleteNoteButtonPressed = { openDialog = true })
+    ChatbotButton()
+    Divider(modifier = Modifier.width(12.dp), color = MaterialTheme.colors.primary)
+    AddPhotoButton()
+    Divider(modifier = Modifier.width(12.dp), color = MaterialTheme.colors.primary)
+    AddToTextButton()
     Divider(modifier = Modifier.width(12.dp), color = MaterialTheme.colors.primary)
     EditNoteButton(editNoteButtonPressed = navigateToListScreen)
 }
@@ -179,6 +183,58 @@ fun DeleteNoteButton(deleteNoteButtonPressed: () -> Unit) {
         )
     }
 }
+
+@Composable
+fun AddToTextButton() {
+    Box(
+        modifier = Modifier
+            .width(40.dp)
+            .height(40.dp)
+            .background(color = BlackOlive, shape = RoundedCornerShape(10.dp)), //need add clickable
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_add_to_text),
+            contentDescription = stringResource(id = R.string.add_text_action),
+            tint = MaterialTheme.colors.secondary
+        )
+    }
+}
+
+@Composable
+fun AddPhotoButton() {
+    Box(
+        modifier = Modifier
+            .width(40.dp)
+            .height(40.dp)
+            .background(color = BlackOlive, shape = RoundedCornerShape(10.dp)), //need add clickable
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_add_photo),
+            contentDescription = stringResource(id = R.string.add_photo_action),
+            tint = MaterialTheme.colors.secondary
+        )
+    }
+}
+
+@Composable
+fun ChatbotButton() {
+    Box(
+        modifier = Modifier
+            .width(40.dp)
+            .height(40.dp)
+            .background(color = BlackOlive, shape = RoundedCornerShape(10.dp)), //need add clickable
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_chatbot),
+            contentDescription = stringResource(id = R.string.chatbot_action),
+            tint = MaterialTheme.colors.secondary
+        )
+    }
+}
+
 
 @Composable
 @Preview

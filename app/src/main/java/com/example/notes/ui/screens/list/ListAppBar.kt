@@ -50,6 +50,9 @@ fun ListAppBar(
                 onSearchIconPressed = {
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
                 },
+                onARIconPressed = {
+                    sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
+                },
                 sortNotesByPriority = { priority ->
                     sharedViewModel.persistSortState(priority)
                 },
@@ -77,6 +80,7 @@ fun ListAppBar(
 @Composable
 fun DefaultListAppBar(
     onSearchIconPressed: () -> Unit,
+    onARIconPressed: () -> Unit,
     sortNotesByPriority: (priority: Priority) -> Unit,
     deleteAllNotes: () -> Unit
 ) {
@@ -91,6 +95,7 @@ fun DefaultListAppBar(
     }, backgroundColor = MaterialTheme.colors.primary, actions = {
         ListAppBarActions(
             onSearchIconPressed = onSearchIconPressed,
+            onARIconPressed = onARIconPressed,
             sortNotesByPriority = sortNotesByPriority,
             deleteAllNotes = deleteAllNotes
         )
@@ -100,10 +105,13 @@ fun DefaultListAppBar(
 @Composable
 fun ListAppBarActions(
     onSearchIconPressed: () -> Unit,
+    onARIconPressed: () -> Unit,
     sortNotesByPriority: (priority: Priority) -> Unit,
     deleteAllNotes: () -> Unit
 ) {
     SearchAction(onSearchIconPressed = onSearchIconPressed)
+    Divider(modifier = Modifier.width(16.dp), color = MaterialTheme.colors.primary)
+    ARAction(onARIconPressed = onARIconPressed)
     Divider(modifier = Modifier.width(16.dp), color = MaterialTheme.colors.primary)
     SortAction(sortNotesByPriority = sortNotesByPriority)
     Divider(modifier = Modifier.width(16.dp), color = MaterialTheme.colors.primary)
@@ -304,6 +312,24 @@ fun SearchAppBar(
                 unfocusedIndicatorColor = Color.Transparent,
                 backgroundColor = Color.Transparent
             )
+        )
+    }
+}
+
+@Composable
+fun ARAction(onARIconPressed: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .width(40.dp)
+            .height(40.dp)
+            .background(color = BlackOlive, shape = RoundedCornerShape(10.dp))
+            .clickable { onARIconPressed() },
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_view_in_ar),
+            contentDescription = stringResource(id = R.string.ar_action),
+            tint = MaterialTheme.colors.secondary
         )
     }
 }

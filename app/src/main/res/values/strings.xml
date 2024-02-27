@@ -37,5 +37,9 @@
     <string name="delete_all_notes_alert_title">Delete All Notes?</string>
     <string name="delete_all_notes_alert_message">Are you sure you want to delete all the notes? There is no going back after this action.</string>
     <string name="calendar_icon">Calendar Icon</string>
+    <string name="ar_action">View in AR</string>
+    <string name="add_text_action">Add a "To Text" action</string>
+    <string name="add_photo_action">Add a photo</string>
+    <string name="chatbot_action">Converse with a chatbot</string>
 
 </resources>
