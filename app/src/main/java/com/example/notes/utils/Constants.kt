@@ -15,4 +15,6 @@ object Constants {
     const val PREF_SORT_STATE_KEY = "sort_state"
 
     const val NOTE_PAGE_SIZE = 5
+
+    const val CHATBOT_SCREEN = "chatbot"
 }

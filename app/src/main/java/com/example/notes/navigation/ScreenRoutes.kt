@@ -2,6 +2,7 @@ package com.example.notes.navigation
 
 import androidx.navigation.NavController
 import com.example.notes.utils.Action
+import com.example.notes.utils.Constants.CHATBOT_SCREEN
 import com.example.notes.utils.Constants.LIST_SCREEN
 import com.example.notes.utils.Constants.SPLASH_SCREEN
 
@@ -21,5 +22,13 @@ class ScreenRoutes(navController: NavController) {
         navController.navigate(route = "list/${Action.NO_ACTION.name}") {
             popUpTo(SPLASH_SCREEN) { inclusive = true }
         }
+    }
+
+    val fromNoteToChatbot: () -> Unit = {
+        navController.navigate(route = CHATBOT_SCREEN)
+    }
+
+    val fromChatbottoNote: (Int) -> Unit = { noteId ->
+        navController.navigate(route = "note/$noteId")
     }
 }

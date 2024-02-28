@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import com.example.notes.navigation.destinations.listComposable
 import com.example.notes.navigation.destinations.noteComposable
 import com.example.notes.navigation.destinations.splashComposable
+import com.example.notes.navigation.destinations.chatbotComposable
 import com.example.notes.ui.viewmodels.SharedViewModel
 import com.example.notes.utils.Constants.LIST_SCREEN
 
@@ -26,6 +27,11 @@ fun SetupNavigation(navController: NavHostController, sharedViewModel: SharedVie
         )
         noteComposable(
             navigateToListScreen = screenRoutes.fromNoteToList,
+            sharedViewModel = sharedViewModel,
+            navigateToChatbotScreen = screenRoutes.fromNoteToChatbot
+        )
+        chatbotComposable(
+            navigateToNoteScreen = screenRoutes.fromChatbottoNote,
             sharedViewModel = sharedViewModel
         )
     }

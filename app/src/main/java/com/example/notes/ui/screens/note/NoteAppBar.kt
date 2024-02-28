@@ -29,13 +29,18 @@ import com.example.notes.utils.Action
 import java.util.*
 
 @Composable
-fun NoteAppBar(navigateToListScreen: (Action) -> Unit, selectedNote: Note?) {
+fun NoteAppBar(
+    navigateToListScreen: (Action) -> Unit,
+    navigateToChatbotScreen: () -> Unit,
+    selectedNote: Note?
+) {
     if (selectedNote == null) {
         NewNoteAppBar(navigateToListScreen = navigateToListScreen)
     } else {
-        EditNoteAppBar(note = selectedNote, navigateToListScreen = navigateToListScreen)
+        EditNoteAppBar(note = selectedNote, navigateToListScreen = navigateToListScreen, navigateToChatbotScreen = navigateToChatbotScreen)
     }
 }
+
 
 @Composable
 fun NewNoteAppBar(navigateToListScreen: (Action) -> Unit) {
@@ -98,7 +103,7 @@ fun AddNoteButton(addNoteButtonPressed: (Action) -> Unit) {
 }
 
 @Composable
-fun EditNoteAppBar(note: Note, navigateToListScreen: (Action) -> Unit) {
+fun EditNoteAppBar(note: Note, navigateToListScreen: (Action) -> Unit, navigateToChatbotScreen: () -> Unit) {
     TopAppBar(
         elevation = 0.dp,
         navigationIcon = {
@@ -115,14 +120,14 @@ fun EditNoteAppBar(note: Note, navigateToListScreen: (Action) -> Unit) {
         },
         backgroundColor = MaterialTheme.colors.primary,
         actions = {
-            EditNoteAppBarActions(note = note, navigateToListScreen = navigateToListScreen)
+            EditNoteAppBarActions(note = note, navigateToListScreen = navigateToListScreen, navigateToChatbotScreen = navigateToChatbotScreen)
             Divider(modifier = Modifier.width(12.dp), color = MaterialTheme.colors.primary)
         }
     )
 }
 
 @Composable
-fun EditNoteAppBarActions(note: Note, navigateToListScreen: (Action) -> Unit) {
+fun EditNoteAppBarActions(note: Note, navigateToListScreen: (Action) -> Unit, navigateToChatbotScreen: () -> Unit) {
     var openDialog by remember {
         mutableStateOf(false)
     }
@@ -139,7 +144,7 @@ fun EditNoteAppBarActions(note: Note, navigateToListScreen: (Action) -> Unit) {
             navigateToListScreen(Action.DELETE)
         })
 
-    ChatbotButton()
+    ChatbotButton(navigateToChatbotScreen = navigateToChatbotScreen)
     Divider(modifier = Modifier.width(12.dp), color = MaterialTheme.colors.primary)
     AddPhotoButton()
     Divider(modifier = Modifier.width(12.dp), color = MaterialTheme.colors.primary)
@@ -219,12 +224,13 @@ fun AddPhotoButton() {
 }
 
 @Composable
-fun ChatbotButton() {
+fun ChatbotButton(navigateToChatbotScreen: () -> Unit) {
     Box(
         modifier = Modifier
             .width(40.dp)
             .height(40.dp)
-            .background(color = BlackOlive, shape = RoundedCornerShape(10.dp)), //need add clickable
+            .background(color = BlackOlive, shape = RoundedCornerShape(10.dp))
+            .clickable { navigateToChatbotScreen() },
         contentAlignment = Alignment.Center
     ) {
         Icon(
@@ -235,11 +241,14 @@ fun ChatbotButton() {
     }
 }
 
-
 @Composable
 @Preview
 fun NoteAppBarPreview() {
-    NoteAppBar(navigateToListScreen = {}, selectedNote = null)
+    NoteAppBar(
+        navigateToListScreen = { /* handle navigation */ },
+        navigateToChatbotScreen = { /* handle navigation */ },
+        selectedNote = null
+    )
 }
 
 @Composable
@@ -255,5 +264,8 @@ fun EditNoteAppBarPreview() {
             workerRequestId = null,
             createdAt = Date(),
             updatedAt = Date()
-        ), navigateToListScreen = {})
+        ),
+        navigateToListScreen = { /* handle navigation */ },
+        navigateToChatbotScreen = { /* handle navigation */ }
+    )
 }

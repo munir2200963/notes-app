@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import com.example.notes.R
 import com.example.notes.data.models.Note
 import com.example.notes.data.models.Priority
+import com.example.notes.navigation.ScreenRoutes
 import com.example.notes.ui.viewmodels.SharedViewModel
 import com.example.notes.utils.Action
 import java.util.*
@@ -24,7 +25,10 @@ import java.util.*
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NoteScreen(
-    navigateToListScreen: (Action) -> Unit, selectedNote: Note?, sharedViewModel: SharedViewModel
+    navigateToListScreen: (Action) -> Unit,
+    navigateToChatbotScreen: () -> Unit,
+    selectedNote: Note?,
+    sharedViewModel: SharedViewModel
 ) {
     val title: String by sharedViewModel.title
     val description: String by sharedViewModel.description
@@ -48,7 +52,8 @@ fun NoteScreen(
                         context = context, message = validationErrorMessage
                     )
                 }
-            }, selectedNote = selectedNote
+            }, selectedNote = selectedNote,
+            navigateToChatbotScreen = navigateToChatbotScreen
         )
     }, content = {
         NoteContent(
