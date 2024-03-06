@@ -4,6 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.example.aistudy.navigation.destinations.ARComposable
+import com.example.aistudy.navigation.destinations.Image2TextComposable
+import com.example.aistudy.navigation.destinations.Speech2TextComposable
 import com.example.aistudy.navigation.destinations.listComposable
 import com.example.aistudy.navigation.destinations.noteComposable
 import com.example.aistudy.navigation.destinations.splashComposable
@@ -22,17 +25,33 @@ fun SetupNavigation(navController: NavHostController, sharedViewModel: SharedVie
             navigateToListScreen = screenRoutes.fromSplashToList
         )
         listComposable(
-            navigateToNoteScreen = screenRoutes.fromListToNote,
-            sharedViewModel = sharedViewModel
+            navigateToNoteScreen = screenRoutes.fromFunctiontoNote,
+            sharedViewModel = sharedViewModel,
+            navigateToARScreen = screenRoutes.fromListToAR
         )
         noteComposable(
             navigateToListScreen = screenRoutes.fromNoteToList,
-            sharedViewModel = sharedViewModel,
-            navigateToChatbotScreen = screenRoutes.fromNoteToChatbot
-        )
-        chatbotComposable(
-            navigateToNoteScreen = screenRoutes.fromChatbottoNote,
+            navigateToChatbotScreen = screenRoutes.fromNoteToChatbot,
+            navigateToImage2TextScreen = screenRoutes.fromNoteToImage2Text,
+            navigateToSpeech2TextScreen = screenRoutes.fromNoteToSpeech2Text,
             sharedViewModel = sharedViewModel
         )
+        chatbotComposable(
+            navigateToNoteScreen = screenRoutes.fromFunctiontoNote,
+            sharedViewModel = sharedViewModel
+        )
+        Image2TextComposable(
+            navigateToNoteScreen = screenRoutes.fromFunctiontoNote,
+            sharedViewModel = sharedViewModel
+        )
+        Speech2TextComposable(
+            navigateToNoteScreen = screenRoutes.fromFunctiontoNote,
+            sharedViewModel = sharedViewModel
+        )
+        ARComposable(
+            navigateToListScreen = screenRoutes.fromARtoList,
+            sharedViewModel = sharedViewModel
+        )
+
     }
 }

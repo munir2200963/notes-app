@@ -67,7 +67,7 @@ class SharedViewModel @Inject constructor(
     val sortState: StateFlow<RequestState<Priority>> = _sortState
 
     val sortLowPriorityNotes: Flow<PagingData<Note>> =
-        notesRepository.sortByHighPriority().cachedIn(viewModelScope)
+        notesRepository.sortByLowPriority().cachedIn(viewModelScope)
     val sortHighPriorityNotes: Flow<PagingData<Note>> =
         notesRepository.sortByHighPriority().cachedIn(viewModelScope)
 

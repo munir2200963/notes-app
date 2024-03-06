@@ -16,7 +16,9 @@ import com.example.aistudy.utils.Constants.NOTE_SCREEN
 fun NavGraphBuilder.noteComposable(
     navigateToListScreen: (Action) -> Unit,
     sharedViewModel: SharedViewModel,
-    navigateToChatbotScreen: () -> Unit
+    navigateToChatbotScreen: () -> Unit,
+    navigateToImage2TextScreen: () -> Unit,
+    navigateToSpeech2TextScreen: () -> Unit
 ) {
     composable(route = NOTE_SCREEN, arguments = listOf(navArgument(NOTE_ARGUMENT_KEY) {
         type = NavType.IntType
@@ -40,6 +42,8 @@ fun NavGraphBuilder.noteComposable(
             navigateToListScreen = navigateToListScreen,
             selectedNote = selectedNote,
             sharedViewModel = sharedViewModel,
-            navigateToChatbotScreen = navigateToChatbotScreen)
+            navigateToChatbotScreen = navigateToChatbotScreen,
+            navigateToImage2TextScreen = navigateToImage2TextScreen,
+            navigateToSpeech2TextScreen = navigateToSpeech2TextScreen)
     }
 }

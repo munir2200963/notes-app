@@ -17,4 +17,9 @@ object Constants {
     const val NOTE_PAGE_SIZE = 5
 
     const val CHATBOT_SCREEN = "chatbot"
+    const val SPEECH2TEXT_SCREEN = "speech2text"
+    const val IMAGE2TEXT_SCREEN = "image2text"
+    const val AR_SCREEN = "augmentedreality"
+
+
 }

@@ -18,7 +18,8 @@ import com.example.aistudy.utils.toAction
 
 fun NavGraphBuilder.listComposable(
     navigateToNoteScreen: (Int) -> Unit,
-    sharedViewModel: SharedViewModel
+    sharedViewModel: SharedViewModel,
+    navigateToARScreen: () -> Unit
 ) {
     composable(route = LIST_SCREEN, arguments = listOf(navArgument(LIST_ARGUMENT_KEY) {
         type = NavType.StringType
@@ -38,7 +39,8 @@ fun NavGraphBuilder.listComposable(
 
         ListScreen(
             navigateToNoteScreen = navigateToNoteScreen,
-            sharedViewModel = sharedViewModel
+            sharedViewModel = sharedViewModel,
+            navigateToARScreen = navigateToARScreen
         )
     }
 }

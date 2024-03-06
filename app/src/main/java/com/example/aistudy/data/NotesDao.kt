@@ -30,27 +30,9 @@ interface NotesDao {
     @Query("SELECT * FROM $DATABASE_TABLE WHERE title LIKE :searchQuery OR description LIKE :searchQuery")
     fun searchNotes(searchQuery: String): PagingSource<Int, Note>
 
-    @Query(
-        """
-        SELECT * FROM $DATABASE_TABLE ORDER BY
-    CASE
-        WHEN priority LIKE 'L%' THEN 1
-        WHEN priority LIKE 'M%' THEN 2
-        WHEN priority LIKE 'H%' THEN 3
-    END
-    """
-    )
+    @Query("SELECT * FROM $DATABASE_TABLE WHERE priority LIKE 'L%'")
     fun sortByLowPriority(): PagingSource<Int, Note>
 
-    @Query(
-        """
-        SELECT * FROM $DATABASE_TABLE ORDER BY
-    CASE
-        WHEN priority LIKE 'H%' THEN 1
-        WHEN priority LIKE 'M%' THEN 2
-        WHEN priority LIKE 'L%' THEN 3 
-    END
-    """
-    )
+    @Query("SELECT * FROM $DATABASE_TABLE WHERE priority LIKE 'H%'")
     fun sortByHighPriority(): PagingSource<Int, Note>
 }

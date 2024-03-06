@@ -28,7 +28,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ListScreen(
     navigateToNoteScreen: (taskId: Int) -> Unit,
-    sharedViewModel: SharedViewModel
+    sharedViewModel: SharedViewModel,
+    navigateToARScreen: () -> Unit
 ) {
 
     val action by sharedViewModel.action
@@ -72,7 +73,8 @@ fun ListScreen(
         topBar = {
             ListAppBar(
                 sharedViewModel = sharedViewModel,
-                searchAppBarState = searchAppBarState
+                searchAppBarState = searchAppBarState,
+                navigateToARScreen = navigateToARScreen
             )
         },
         content = {
@@ -89,7 +91,7 @@ fun ListScreen(
                                     scaffoldState = scaffoldState
                                 )
                             },
-                            navigateToNoteScreen = navigateToNoteScreen
+                            navigateToNoteScreen = navigateToNoteScreen,
                         )
                     }
                     (sortState as RequestState.Success<Priority>).data == Priority.LOW -> {
@@ -103,7 +105,7 @@ fun ListScreen(
                                     scaffoldState = scaffoldState
                                 )
                             },
-                            navigateToNoteScreen = navigateToNoteScreen
+                            navigateToNoteScreen = navigateToNoteScreen,
                         )
                     }
                     (sortState as RequestState.Success<Priority>).data == Priority.HIGH -> {
@@ -117,7 +119,7 @@ fun ListScreen(
                                     scaffoldState = scaffoldState
                                 )
                             },
-                            navigateToNoteScreen = navigateToNoteScreen
+                            navigateToNoteScreen = navigateToNoteScreen,
                         )
                     }
                     (sortState as RequestState.Success<Priority>).data == Priority.NONE -> {
@@ -226,7 +228,7 @@ fun DisplaySnackBar(
 private fun getSnackBarMessage(action: Action, noteTitle: String): String {
     return when (action) {
         Action.DELETE_ALL -> {
-            "All Notes Delete"
+            "All notes deleted!"
         }
         else -> {
             "${action.name}: $noteTitle"

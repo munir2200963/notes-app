@@ -26,8 +26,10 @@ import java.util.*
 fun NoteScreen(
     navigateToListScreen: (Action) -> Unit,
     navigateToChatbotScreen: () -> Unit,
+    navigateToImage2TextScreen: () -> Unit,
     selectedNote: Note?,
-    sharedViewModel: SharedViewModel
+    sharedViewModel: SharedViewModel,
+    navigateToSpeech2TextScreen: () -> Unit
 ) {
     val title: String by sharedViewModel.title
     val description: String by sharedViewModel.description
@@ -52,7 +54,9 @@ fun NoteScreen(
                     )
                 }
             }, selectedNote = selectedNote,
-            navigateToChatbotScreen = navigateToChatbotScreen
+            navigateToChatbotScreen = navigateToChatbotScreen,
+            navigateToImage2TextScreen = navigateToImage2TextScreen,
+            navigateToSpeech2TextScreen = navigateToSpeech2TextScreen
         )
     }, content = {
         NoteContent(

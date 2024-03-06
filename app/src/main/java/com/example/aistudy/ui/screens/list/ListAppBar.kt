@@ -42,6 +42,7 @@ import com.example.aistudy.utils.SearchAppBarState
 fun ListAppBar(
     sharedViewModel: SharedViewModel,
     searchAppBarState: SearchAppBarState,
+    navigateToARScreen:() -> Unit
 ) {
 
     when (searchAppBarState) {
@@ -50,9 +51,7 @@ fun ListAppBar(
                 onSearchIconPressed = {
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
                 },
-                onARIconPressed = {
-                    sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
-                },
+                navigateToARScreen = navigateToARScreen,
                 sortNotesByPriority = { priority ->
                     sharedViewModel.persistSortState(priority)
                 },
@@ -80,9 +79,9 @@ fun ListAppBar(
 @Composable
 fun DefaultListAppBar(
     onSearchIconPressed: () -> Unit,
-    onARIconPressed: () -> Unit,
+    navigateToARScreen: () -> Unit,
     sortNotesByPriority: (priority: Priority) -> Unit,
-    deleteAllNotes: () -> Unit
+    deleteAllNotes: () -> Unit,
 ) {
     TopAppBar(elevation = 0.dp, title = {
         CustomText(
@@ -95,7 +94,7 @@ fun DefaultListAppBar(
     }, backgroundColor = MaterialTheme.colors.primary, actions = {
         ListAppBarActions(
             onSearchIconPressed = onSearchIconPressed,
-            onARIconPressed = onARIconPressed,
+            navigateToARScreen = navigateToARScreen,
             sortNotesByPriority = sortNotesByPriority,
             deleteAllNotes = deleteAllNotes
         )
@@ -105,13 +104,13 @@ fun DefaultListAppBar(
 @Composable
 fun ListAppBarActions(
     onSearchIconPressed: () -> Unit,
-    onARIconPressed: () -> Unit,
+    navigateToARScreen: () -> Unit,
     sortNotesByPriority: (priority: Priority) -> Unit,
     deleteAllNotes: () -> Unit
 ) {
     SearchAction(onSearchIconPressed = onSearchIconPressed)
     Divider(modifier = Modifier.width(16.dp), color = MaterialTheme.colors.primary)
-    ARAction(onARIconPressed = onARIconPressed)
+    ARAction(navigateToARScreen = navigateToARScreen)
     Divider(modifier = Modifier.width(16.dp), color = MaterialTheme.colors.primary)
     SortAction(sortNotesByPriority = sortNotesByPriority)
     Divider(modifier = Modifier.width(16.dp), color = MaterialTheme.colors.primary)
@@ -317,13 +316,13 @@ fun SearchAppBar(
 }
 
 @Composable
-fun ARAction(onARIconPressed: () -> Unit) {
+fun ARAction(navigateToARScreen: () -> Unit) {
     Box(
         modifier = Modifier
             .width(40.dp)
             .height(40.dp)
             .background(color = BlackOlive, shape = RoundedCornerShape(10.dp))
-            .clickable { onARIconPressed() },
+            .clickable { navigateToARScreen() },
         contentAlignment = Alignment.Center
     ) {
         Icon(
