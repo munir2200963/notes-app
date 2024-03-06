@@ -8,15 +8,28 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.FloatingActionButtonDefaults
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.example.aistudy.R
 import com.example.aistudy.data.models.Note
 import com.example.aistudy.data.models.Priority
+import com.example.aistudy.ui.screens.list.FloatingButton
+import com.example.aistudy.ui.theme.BlackOlive
+import com.example.aistudy.ui.theme.Blue
 import com.example.aistudy.ui.viewmodels.SharedViewModel
 import com.example.aistudy.utils.Action
 import java.util.*
@@ -77,6 +90,13 @@ fun NoteScreen(
                 sharedViewModel.reminderDateTime.value = date
             }
         )
+    },
+        floatingActionButton = {
+            if (selectedNote == null) {
+                FloatingButton(navigateToImage2TextScreen)
+            } else {
+                FloatingButton(navigateToSpeech2TextScreen)
+            }
     })
 }
 
@@ -93,4 +113,19 @@ fun displayToast(context: Context, message: String) {
     text?.setBackgroundColor(Color.TRANSPARENT);
 
     toast.show();
+}
+
+@Composable
+fun FloatingButton(onFloatingActionButtonPressed: () -> Unit) {
+    FloatingActionButton(
+        modifier = Modifier.padding(end = 8.dp, bottom = 32.dp),
+        elevation = FloatingActionButtonDefaults.elevation(20.dp),
+        backgroundColor = BlackOlive,
+        onClick = { onFloatingActionButtonPressed() }) {
+        Icon(
+            imageVector = Icons.Filled.Check,
+            contentDescription = stringResource(id = R.string.add_note_action),
+            tint = Blue
+        )
+    }
 }
