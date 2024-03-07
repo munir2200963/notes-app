@@ -92,12 +92,17 @@ fun NoteScreen(
         )
     },
         floatingActionButton = {
-            if (selectedNote == null) {
-                FloatingButton(navigateToImage2TextScreen)
-            } else {
-                FloatingButton(navigateToSpeech2TextScreen)
-            }
-    })
+            val action = if (selectedNote == null) Action.ADD else Action.UPDATE
+            FloatingButton(
+                action = action,
+                navigateToListScreen = navigateToListScreen,
+                validateNoteFields = sharedViewModel::validateNoteFields,
+                displayToast = ::displayToast,
+                context = context,
+                validationErrorMessage = validationErrorMessage
+            )
+        }
+    )
 }
 
 fun displayToast(context: Context, message: String) {
@@ -116,12 +121,27 @@ fun displayToast(context: Context, message: String) {
 }
 
 @Composable
-fun FloatingButton(onFloatingActionButtonPressed: () -> Unit) {
+fun FloatingButton(
+    action: Action,
+    navigateToListScreen: (Action) -> Unit,
+    validateNoteFields: () -> Boolean,
+    displayToast: (Context, String) -> Unit,
+    context: Context,
+    validationErrorMessage: String
+) {
     FloatingActionButton(
         modifier = Modifier.padding(end = 8.dp, bottom = 32.dp),
         elevation = FloatingActionButtonDefaults.elevation(20.dp),
         backgroundColor = BlackOlive,
-        onClick = { onFloatingActionButtonPressed() }) {
+        onClick = {
+            // Perform the validation check when the action is not NO_ACTION
+            if (action == Action.NO_ACTION || validateNoteFields()) {
+                navigateToListScreen(action)
+            } else {
+                displayToast(context, validationErrorMessage)
+            }
+        }
+    ) {
         Icon(
             imageVector = Icons.Filled.Check,
             contentDescription = stringResource(id = R.string.add_note_action),

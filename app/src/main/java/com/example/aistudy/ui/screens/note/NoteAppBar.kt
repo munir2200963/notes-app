@@ -1,5 +1,10 @@
 package com.example.aistudy.ui.screens.note
 
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -28,7 +33,10 @@ import com.example.aistudy.utils.Action
 import java.util.*
 import com.example.aistudy.R
 import androidx.compose.material.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.window.PopupProperties
+import androidx.core.content.ContextCompat
+import java.util.jar.Manifest
 
 @Composable
 fun NoteAppBar(
@@ -64,7 +72,6 @@ fun NewNoteAppBar(navigateToListScreen: (Action) -> Unit) {
         },
         backgroundColor = MaterialTheme.colors.primary,
         actions = {
-            AddNoteButton(addNoteButtonPressed = navigateToListScreen)
             Divider(modifier = Modifier.width(12.dp), color = MaterialTheme.colors.primary)
         }
     )
@@ -150,11 +157,12 @@ fun EditNoteAppBarActions(note: Note, navigateToListScreen: (Action) -> Unit, na
 
     ChatbotButton(navigateToChatbotScreen = navigateToChatbotScreen)
     Divider(modifier = Modifier.width(12.dp), color = MaterialTheme.colors.primary)
-    AddPhotoButton()
+    AddPhotoButton(
+        onImagePicked = { /* Placeholder for future implementation */}
+    )
     Divider(modifier = Modifier.width(12.dp), color = MaterialTheme.colors.primary)
     AddToTextButton(navigateToImage2TextScreen = navigateToImage2TextScreen, navigateToSpeech2TextScreen = navigateToSpeech2TextScreen)
     Divider(modifier = Modifier.width(12.dp), color = MaterialTheme.colors.primary)
-    EditNoteButton(editNoteButtonPressed = navigateToListScreen)
 }
 
 @Composable
@@ -238,14 +246,88 @@ fun AddToTextButton(
     }
 }
 
-
 @Composable
-fun AddPhotoButton() {
+fun AddPhotoButton(
+    onImagePicked: (Uri?) -> Unit
+) {
+    val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
+
+    // Remember a launcher for permissions
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted: Boolean ->
+            if (isGranted) {
+                // Permission granted, you can proceed with opening camera or gallery
+                showDialog = true
+            } else {
+                // Handle permission denial gracefully
+            }
+        }
+    )
+
+    // Remember a launcher for taking a picture and saving it
+    val takePictureLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicturePreview(),
+        onResult = { bitmap: Bitmap? ->
+            // Convert bitmap to Uri or handle it directly
+        }
+    )
+
+    // Remember a launcher for picking an image
+    val pickImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = onImagePicked
+    )
+
+    // This checks for permission and shows the dialog
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = "Add Photo") },
+            text = { Text(text = "Choose an action") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDialog = false
+                        takePictureLauncher.launch(null)
+                    }
+                ) {
+                    Text(text = "Take Photo")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showDialog = false
+                        pickImageLauncher.launch("image/*")
+                    }
+                ) {
+                    Text(text = "Pick from Gallery")
+                }
+            }
+        )
+    }
+
     Box(
         modifier = Modifier
             .width(40.dp)
             .height(40.dp)
-            .background(color = BlackOlive, shape = RoundedCornerShape(10.dp)), //need add clickable
+            .background(color = BlackOlive, shape = RoundedCornerShape(10.dp))
+            .clickable {
+                // Check for camera permission before showing dialog
+                when (PackageManager.PERMISSION_GRANTED) {
+                    ContextCompat.checkSelfPermission(
+                        context,
+                        android.Manifest.permission.CAMERA
+                    ) -> {
+                        showDialog = true
+                    }
+                    else -> {
+                        permissionLauncher.launch(android.Manifest.permission.CAMERA)
+                    }
+                }
+            },
         contentAlignment = Alignment.Center
     ) {
         Icon(
@@ -255,6 +337,9 @@ fun AddPhotoButton() {
         )
     }
 }
+
+
+
 
 @Composable
 fun ChatbotButton(navigateToChatbotScreen: () -> Unit) {
