@@ -21,7 +21,7 @@ val fontFamily = FontFamily(
 // chat
 val Typography2 = Typography(
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,

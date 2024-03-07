@@ -41,5 +41,6 @@
     <string name="add_text_action">Add a "To Text" action</string>
     <string name="add_photo_action">Add a photo</string>
     <string name="chatbot_action">Converse with a chatbot</string>
+    <string name="chatbot_name">StudyBuddy</string>
 
 </resources>

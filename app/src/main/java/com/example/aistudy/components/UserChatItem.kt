@@ -13,10 +13,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.aistudy.ui.theme.BlueChat
 
 @Composable
 fun UserChatItem(prompt: String, bitmap: Bitmap?) {
@@ -41,11 +43,11 @@ fun UserChatItem(prompt: String, bitmap: Bitmap?) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.primary)
+                .background(BlueChat)
                 .padding(16.dp),
             text = prompt,
-            fontSize = 17.sp,
-            color = MaterialTheme.colorScheme.onPrimary
+            fontSize = 20.sp,
+            color = Color.White
         )
 
     }

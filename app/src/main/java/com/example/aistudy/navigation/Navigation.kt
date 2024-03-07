@@ -38,7 +38,8 @@ fun SetupNavigation(navController: NavHostController, sharedViewModel: SharedVie
         )
         chatbotComposable(
             navigateToNoteScreen = screenRoutes.fromFunctiontoNote,
-            sharedViewModel = sharedViewModel
+            sharedViewModel = sharedViewModel,
+            navController = navController
         )
         Image2TextComposable(
             navigateToNoteScreen = screenRoutes.fromFunctiontoNote,
