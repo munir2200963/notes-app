@@ -18,10 +18,15 @@ object AppModule {
     @Singleton
     @Provides
     fun provideNotesDatabase(@ApplicationContext context: Context) =
-        Room.databaseBuilder(context, NotesDatabase::class.java, DATABASE_NAME).build()
+        Room.databaseBuilder(context, NotesDatabase::class.java, DATABASE_NAME)
+            .fallbackToDestructiveMigration()
+            .build()
 
     @Singleton
     @Provides
     fun provideNotesDao(database: NotesDatabase) = database.notesDao()
 
+    @Singleton
+    @Provides
+    fun provideCategoryDao(database: NotesDatabase) = database.categoryDao()
 }

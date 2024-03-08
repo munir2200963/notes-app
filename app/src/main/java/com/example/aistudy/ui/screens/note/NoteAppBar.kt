@@ -383,7 +383,8 @@ fun EditNoteAppBarPreview() {
             reminderDateTime = null,
             workerRequestId = null,
             createdAt = Date(),
-            updatedAt = Date()
+            updatedAt = Date(),
+            categoryId = 1
         ),
         navigateToListScreen = { /* handle navigation */ },
         navigateToChatbotScreen = { /* handle navigation */ },

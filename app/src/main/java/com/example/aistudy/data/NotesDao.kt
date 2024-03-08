@@ -35,4 +35,5 @@ interface NotesDao {
 
     @Query("SELECT * FROM $DATABASE_TABLE WHERE priority LIKE 'H%'")
     fun sortByHighPriority(): PagingSource<Int, Note>
+
 }

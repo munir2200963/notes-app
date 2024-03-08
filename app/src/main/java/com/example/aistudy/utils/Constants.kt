@@ -3,6 +3,7 @@ package com.example.aistudy.utils
 object Constants {
     const val DATABASE_NAME = "notes_database"
     const val DATABASE_TABLE = "notes_table"
+    const val CAT_TABLE = "categories_table"
 
     const val SPLASH_SCREEN = "splash"
     const val LIST_SCREEN = "list/{action}"

@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -28,6 +30,7 @@ import com.example.aistudy.components.PriorityDropDown
 import com.example.aistudy.data.models.Priority
 import com.example.aistudy.ui.theme.ChineseSilver
 import com.example.aistudy.ui.theme.fontFamily
+import com.example.aistudy.ui.viewmodels.SharedViewModel
 import com.example.aistudy.utils.GlobalVariable
 import com.example.aistudy.utils.dateToString
 import java.util.*
@@ -38,11 +41,16 @@ fun NoteContent(
     onTitleChange: (String) -> Unit,
     description: String,
     onDescriptionChange: (String) -> Unit,
-    priority: Priority,
-    onPriorityChange: (Priority) -> Unit,
     reminderDateTime: Date?,
-    onReminderDateTimeChange: (Date) -> Unit
+    onReminderDateTimeChange: (Date) -> Unit,
+    sharedViewModel: SharedViewModel
 ) {
+    val categories by sharedViewModel.categories.collectAsState()
+    val selectedCategoryId by sharedViewModel.selectedCategoryId
+
+    // Find the selected category object based on the selectedCategoryId
+    val selectedCategory = categories.find { it.id == selectedCategoryId }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -108,7 +116,17 @@ fun NoteContent(
             modifier = Modifier.height(12.dp), color = MaterialTheme.colors.primary
         )
 
-        PriorityDropDown(priority = priority, onPriorityChange = onPriorityChange)
+        PriorityDropDown(
+            categories = categories,
+            selectedCategory = selectedCategory,
+            onCategoryChange = { category ->
+                // Update the selected category in the ViewModel
+                sharedViewModel.selectedCategoryId.value = category.id
+            }
+        ) { categoryName, categoryEmoji ->
+            // Delegate adding a new category to the ViewModel
+            sharedViewModel.addCategory(categoryName, categoryEmoji)
+        }
 
         Divider(
             modifier = Modifier.height(16.dp), color = MaterialTheme.colors.primary
@@ -248,17 +266,18 @@ fun DateAndTimerPicker(
     }
 }
 
-@Composable
-@Preview
-fun NoteContentPreview() {
-    NoteContent(
-        title = "Title",
-        onTitleChange = {},
-        description = "Description",
-        onDescriptionChange = {},
-        priority = Priority.LOW,
-        onPriorityChange = {},
-        reminderDateTime = Date(),
-        onReminderDateTimeChange = {}
-    )
-}
+//@Composable
+//@Preview
+//fun NoteContentPreview() {
+//    NoteContent(
+//        title = "Title",
+//        onTitleChange = {},
+//        description = "Description",
+//        onDescriptionChange = {},
+//        priority = Priority.LOW,
+//        onPriorityChange = {},
+//        reminderDateTime = Date(),
+//        onReminderDateTimeChange = {}
+//                categoryId = 1
+//    )
+//}

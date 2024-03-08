@@ -81,14 +81,11 @@ fun NoteScreen(
             onDescriptionChange = { description ->
                 sharedViewModel.description.value = description
             },
-            priority = priority,
-            onPriorityChange = { priority ->
-                sharedViewModel.priority.value = priority
-            },
             reminderDateTime = reminderDateTime,
             onReminderDateTimeChange = { date ->
                 sharedViewModel.reminderDateTime.value = date
-            }
+            },
+            sharedViewModel = sharedViewModel
         )
     },
         floatingActionButton = {

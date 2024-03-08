@@ -11,6 +11,8 @@ import androidx.paging.cachedIn
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.example.aistudy.data.CategoryDao
+import com.example.aistudy.data.models.Category
 import com.example.aistudy.data.models.Note
 import com.example.aistudy.data.models.Priority
 import com.example.aistudy.data.repositories.DataStoreRepository
@@ -33,7 +35,8 @@ class SharedViewModel @Inject constructor(
     private val application: Application,
     private val notesRepository: NotesRepository,
     private val dataStoreRepository: DataStoreRepository,
-    private val workManager: WorkManager
+    private val workManager: WorkManager,
+    private val categoryDao: CategoryDao
 ) : ViewModel() {
 
     private val _shouldShowSplashScreen = MutableStateFlow<Boolean>(true)
@@ -71,6 +74,10 @@ class SharedViewModel @Inject constructor(
     val sortHighPriorityNotes: Flow<PagingData<Note>> =
         notesRepository.sortByHighPriority().cachedIn(viewModelScope)
 
+    private val _categories = MutableStateFlow<List<Category>>(emptyList())
+    val categories: StateFlow<List<Category>> = _categories.asStateFlow()
+    val selectedCategoryId: MutableState<Int> = mutableStateOf(-1) // Initialize with -1 or a default value
+
     init {
         viewModelScope.launch {
             delay(2000)
@@ -78,6 +85,15 @@ class SharedViewModel @Inject constructor(
         }
         getAllNotes()
         readSortState()
+    }
+
+    init {
+        // Fetch categories from database
+        viewModelScope.launch {
+            categoryDao.getAllCategories().collect { categoriesList ->
+                _categories.value = categoriesList
+            }
+        }
     }
 
     private fun getAllNotes() {
@@ -174,7 +190,8 @@ class SharedViewModel @Inject constructor(
                 reminderDateTime = reminderDateTime.value,
                 workerRequestId = workerRequestId.value,
                 createdAt = Calendar.getInstance().time,
-                updatedAt = Calendar.getInstance().time
+                updatedAt = Calendar.getInstance().time,
+                categoryId = selectedCategoryId.value
             )
 
             notesRepository.addNote(note)
@@ -192,7 +209,8 @@ class SharedViewModel @Inject constructor(
                 reminderDateTime = reminderDateTime.value,
                 workerRequestId = workerRequestId.value,
                 createdAt = createdAt.value,
-                updatedAt = Date()
+                updatedAt = Date(),
+                categoryId = selectedCategoryId.value
             )
 
             notesRepository.updateNote(note)
@@ -212,7 +230,8 @@ class SharedViewModel @Inject constructor(
                 reminderDateTime = reminderDateTime.value,
                 workerRequestId = workerRequestId.value,
                 createdAt = createdAt.value,
-                updatedAt = updatedAt.value
+                updatedAt = updatedAt.value,
+                categoryId = selectedCategoryId.value
             )
 
             notesRepository.deleteNote(note)
@@ -286,5 +305,13 @@ class SharedViewModel @Inject constructor(
         workerRequestId.value = myWorkRequest.id
 
         workManager.enqueue(myWorkRequest)
+    }
+
+    // Function to add a new category
+    fun addCategory(categoryName: String, categoryEmoji: String) {
+        viewModelScope.launch {
+            val newCategory = Category(id = 0, name = categoryName, emoji = categoryEmoji)
+            categoryDao.addCategory(newCategory)
+        }
     }
 }

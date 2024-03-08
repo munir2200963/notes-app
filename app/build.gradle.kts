@@ -107,6 +107,8 @@ dependencies {
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
+    // Emoji
+    implementation("androidx.emoji2:emoji2-emojipicker")
 }
 
 kapt {

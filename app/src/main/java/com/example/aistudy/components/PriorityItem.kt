@@ -17,13 +17,7 @@ import com.example.aistudy.data.models.Priority
 @Composable
 fun PriorityItem(priority: Priority) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Canvas(
-            modifier = Modifier.size(12.dp)
-        ) {
-            drawCircle(color = priority.color)
-        }
         CustomText(
-            modifier = Modifier.padding(start = 12.dp),
             text = priority.name,
             color = MaterialTheme.colors.secondary,
             fontWeight = FontWeight.W400,

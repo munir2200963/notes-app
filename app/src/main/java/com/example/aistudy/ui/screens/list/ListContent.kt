@@ -222,7 +222,8 @@ fun NoteItemPreview() {
         reminderDateTime = null,
         workerRequestId = null,
         createdAt = Date(),
-        updatedAt = Date()
+        updatedAt = Date(),
+        categoryId = 1
     ),
         index = 0,
         navigateToNoteScreen = {})
