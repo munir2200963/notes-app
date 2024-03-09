@@ -71,14 +71,4 @@ class NotesRepository @Inject constructor(private val notesDao: NotesDao) {
             pagingSourceFactory = pagingSourceFactory
         ).flow
     }
-
-    fun filterByCategory(categoryId: Int): Flow<PagingData<Note>> {
-        val pagingSourceFactory = { notesDao.filterByCategory(categoryId) }
-        return Pager(
-            config = PagingConfig(
-                pageSize = NOTE_PAGE_SIZE
-            ),
-            pagingSourceFactory = pagingSourceFactory
-        ).flow
-    }
 }
