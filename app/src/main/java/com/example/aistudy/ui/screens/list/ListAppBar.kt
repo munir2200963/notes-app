@@ -28,8 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.example.aistudy.R
 import com.example.aistudy.components.CustomText
 import com.example.aistudy.components.DisplayAlertDialog
-import com.example.aistudy.components.PriorityItem
-import com.example.aistudy.data.models.Priority
+import com.example.aistudy.data.models.Category
 import com.example.aistudy.ui.theme.BlackOlive
 import com.example.aistudy.ui.theme.ChineseSilver
 import com.example.aistudy.ui.theme.fontFamily
@@ -44,6 +43,7 @@ fun ListAppBar(
     searchAppBarState: SearchAppBarState,
     navigateToARScreen:() -> Unit
 ) {
+    val categories by sharedViewModel.categories.collectAsState()
 
     when (searchAppBarState) {
         SearchAppBarState.CLOSED -> {
@@ -52,13 +52,10 @@ fun ListAppBar(
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
                 },
                 navigateToARScreen = navigateToARScreen,
-                sortNotesByPriority = { priority ->
-                    sharedViewModel.persistSortState(priority)
-                },
-                deleteAllNotes = {
-                    sharedViewModel.action.value = Action.DELETE_ALL
-                }
-            )
+                categories = categories
+            ) {
+                sharedViewModel.action.value = Action.DELETE_ALL
+            }
         }
         else -> {
             SearchAppBar(
@@ -80,7 +77,7 @@ fun ListAppBar(
 fun DefaultListAppBar(
     onSearchIconPressed: () -> Unit,
     navigateToARScreen: () -> Unit,
-    sortNotesByPriority: (priority: Priority) -> Unit,
+    categories: List<Category>,
     deleteAllNotes: () -> Unit,
 ) {
     TopAppBar(elevation = 0.dp, title = {
@@ -95,7 +92,7 @@ fun DefaultListAppBar(
         ListAppBarActions(
             onSearchIconPressed = onSearchIconPressed,
             navigateToARScreen = navigateToARScreen,
-            sortNotesByPriority = sortNotesByPriority,
+            categories = categories,
             deleteAllNotes = deleteAllNotes
         )
     })
@@ -105,14 +102,14 @@ fun DefaultListAppBar(
 fun ListAppBarActions(
     onSearchIconPressed: () -> Unit,
     navigateToARScreen: () -> Unit,
-    sortNotesByPriority: (priority: Priority) -> Unit,
+    categories: List<Category>,
     deleteAllNotes: () -> Unit
 ) {
     SearchAction(onSearchIconPressed = onSearchIconPressed)
     Divider(modifier = Modifier.width(16.dp), color = MaterialTheme.colors.primary)
     ARAction(navigateToARScreen = navigateToARScreen)
     Divider(modifier = Modifier.width(16.dp), color = MaterialTheme.colors.primary)
-    SortAction(sortNotesByPriority = sortNotesByPriority)
+    CategoryFilterAction(categories = categories)
     Divider(modifier = Modifier.width(16.dp), color = MaterialTheme.colors.primary)
     DeleteAllAction(deleteAllNotes = deleteAllNotes)
     Divider(modifier = Modifier.width(12.dp), color = MaterialTheme.colors.primary)
@@ -137,7 +134,9 @@ fun SearchAction(onSearchIconPressed: () -> Unit) {
 }
 
 @Composable
-fun SortAction(sortNotesByPriority: (priority: Priority) -> Unit) {
+fun CategoryFilterAction(
+    categories: List<Category>
+) {
     var expanded by remember {
         mutableStateOf(false)
     }
@@ -159,12 +158,11 @@ fun SortAction(sortNotesByPriority: (priority: Priority) -> Unit) {
             modifier = Modifier.background(BlackOlive),
             expanded = expanded,
             onDismissRequest = { expanded = false }) {
-            Priority.values().slice(setOf(0, 2, 3)).forEach { priority ->
+            categories.forEach { category ->
                 DropdownMenuItem(onClick = {
-                    sortNotesByPriority(priority)
                     expanded = false
                 }) {
-                    PriorityItem(priority = priority)
+                    Text(text = "${category.emoji} ${category.name}")
                 }
             }
         }

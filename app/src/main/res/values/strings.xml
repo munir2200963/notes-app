@@ -5,7 +5,8 @@
     <string name="add_note_action">Add Note</string>
     <string name="search_notes_action">Search Notes</string>
     <string name="sort_notes_action">Sort Notes</string>
-    <string name="delete_all_notes_action">Delete All</string>
+    <string name="delete_all_notes_action">Delete All Notes</string>
+    <string name="delete_all_categories_action">Delete All Cat</string>
     <string name="search_placeholder">Search</string>
     <string name="close_icon">Close Icon</string>
     <string name="search_icon">Search Icon</string>

@@ -36,4 +36,6 @@ interface NotesDao {
     @Query("SELECT * FROM $DATABASE_TABLE WHERE priority LIKE 'H%'")
     fun sortByHighPriority(): PagingSource<Int, Note>
 
+    @Query("SELECT * FROM $DATABASE_TABLE WHERE categoryId = :categoryId")
+    fun filterByCategory(categoryId: Int): PagingSource<Int, Note>
 }
